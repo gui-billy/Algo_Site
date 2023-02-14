@@ -79,7 +79,7 @@ async def protected(token: str = Depends(oauth2_scheme)):
 async def receive_mql5_call(server: str, account_number: str):
     for item in CLIENTS:
         if server == item["server"] and account_number == item["a_number"]:
-            if (datetime.utcnow() >= datetime.date(item["exp_date"])):
+            if (datetime.utcnow() >= item["exp_date"]):
                 return {"server": server, "account_number": account_number, "now": datetime.utcnow(), "Val": item["exp_date"]}
             else:
                 return {"EA expirado em: ", item["exp_date"]}
