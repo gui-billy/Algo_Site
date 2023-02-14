@@ -14,7 +14,7 @@ CREDENTIALS = [
 
 CLIENTS = [
     {"server": "GenialInvestimentos-PRD",
-        "a_number": "461035", "exp_date": datetime(2023, 5, 1)}
+        "a_number": "461035", "exp_date": "2023-05-01 00:00:00"}
 ]
 
 
@@ -79,10 +79,11 @@ async def protected(token: str = Depends(oauth2_scheme)):
 async def receive_mql5_call(server: str, account_number: str):
     for item in CLIENTS:
         if server == item["server"] and account_number == item["a_number"]:
-            if (datetime.utcnow() >= item["exp_date"]):
-                return {"server": server, "account_number": account_number, "now": datetime.utcnow(), "Val": item["exp_date"]}
+            dtt = datetime.strptime(item["exp_date"], '%Y-%m-%d %H:%M:%S')
+            if (datetime.now() >= dtt):
+                return {"server": server, "account_number": account_number, "Val": dtt}
             else:
-                return {"EA expirado em: ", item["exp_date"]}
+                return {"EA expirado em: ", dtt}
         else:
             return "Número de conta inválida"
         ''' 
