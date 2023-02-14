@@ -12,6 +12,10 @@ CREDENTIALS = [
     {"username": "user2", "password": "password2"}
 ]
 
+CLIENTS = [
+    {"server": "GenialInvestimentos-PRD", "a_number": "461035"}
+]
+
 
 class LoginData(BaseModel):
     username: str
@@ -72,10 +76,14 @@ async def protected(token: str = Depends(oauth2_scheme)):
 
 @app.get("/metatrader5")
 async def receive_mql5_call(server: str, account_number: str):
-    '''
+    for item in CLIENTS:
+        if server == item["server"] and account_number == item["a_number"]:
+            return {"server": server, "account_number": account_number}
+        else:
+            return "Invalid"
+        ''' 
     A rota "/metatrader5" é pública. 
     Quando a plataforma faz uma chamada para o servidor, essa rota é acionada e recebe dois parâmetros, "server" e "account_number". 
     Esses parâmetros são imprimidos para fins de depuração e permitem identificar de forma única a conta de negociação que está sendo acessada na plataforma MetaTrader 5.
     '''
     # return {"server": server, "account_number": account_number}
-    return "py-ok"
