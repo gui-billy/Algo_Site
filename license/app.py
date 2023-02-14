@@ -1,9 +1,10 @@
-import jwt
+import secrets
 from datetime import datetime, timedelta
-from fastapi import FastAPI, HTTPException, Depends, Header
+
+import jwt
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
-import secrets
 
 secret = secrets.token_hex(32)
 CREDENTIALS = [
@@ -11,12 +12,15 @@ CREDENTIALS = [
     {"username": "user2", "password": "password2"}
 ]
 
+
 class LoginData(BaseModel):
     username: str
     password: str
 
+
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 
 @app.post("/login")
 async def login(data: LoginData):
@@ -37,7 +41,9 @@ async def login(data: LoginData):
                 "token_type": "bearer",
                 "expires_in": expires_at.timestamp()
             }
-    raise HTTPException(status_code=400, detail="Incorrect username or password")
+    raise HTTPException(
+        status_code=400, detail="Incorrect username or password")
+
 
 def validate_jwt_token(token: str):
     ''''
@@ -53,6 +59,7 @@ def validate_jwt_token(token: str):
     except (jwt.PyJWTError, ValueError):
         raise HTTPException(status_code=400, detail="Invalid JWT token")
 
+
 @app.get("/protected")
 async def protected(token: str = Depends(oauth2_scheme)):
     '''
@@ -62,6 +69,7 @@ async def protected(token: str = Depends(oauth2_scheme)):
     payload = validate_jwt_token(token)
     return {"message": f"Welcome, {payload['sub']}!"}
 
+
 @app.get("/metatrader5")
 async def receive_mql5_call(server: str, account_number: str):
     '''
@@ -69,4 +77,5 @@ async def receive_mql5_call(server: str, account_number: str):
     Quando a plataforma faz uma chamada para o servidor, essa rota é acionada e recebe dois parâmetros, "server" e "account_number". 
     Esses parâmetros são imprimidos para fins de depuração e permitem identificar de forma única a conta de negociação que está sendo acessada na plataforma MetaTrader 5.
     '''
-    return {"server": server, "account_number": account_number}
+    # return {"server": server, "account_number": account_number}
+    return "py-ok"
