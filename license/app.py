@@ -13,7 +13,8 @@ CREDENTIALS = [
 ]
 
 CLIENTS = [
-    {"server": "GenialInvestimentos-PRD", "a_number": "461035"}
+    {"server": "GenialInvestimentos-PRD",
+        "a_number": "461035", "exp_date": datetime(2023, 5, 1)}
 ]
 
 
@@ -78,9 +79,12 @@ async def protected(token: str = Depends(oauth2_scheme)):
 async def receive_mql5_call(server: str, account_number: str):
     for item in CLIENTS:
         if server == item["server"] and account_number == item["a_number"]:
-            return {"server": server, "account_number": account_number}
+            if (datetime.utcnow() >= datetime.date(item["exp_date"])):
+                return {"server": server, "account_number": account_number, "now": datetime.utcnow(), "Val": item["exp_date"]}
+            else:
+                return {"EA expirado em: ", item["exp_date"]}
         else:
-            return "Invalid"
+            return "Número de conta inválida"
         ''' 
     A rota "/metatrader5" é pública. 
     Quando a plataforma faz uma chamada para o servidor, essa rota é acionada e recebe dois parâmetros, "server" e "account_number". 
