@@ -64,8 +64,8 @@ app = FastAPI()
 
 
 @app.get("/mt5")
-async def login(data: LoginData):
-    return {"ok"}
+async def receive_mql5_call(server: str, account_number: str):
+    return {"server": server, "account_number": account_number}
 
 
 # async def receive_mql5_call(server: str, account_number: str):
