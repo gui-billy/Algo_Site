@@ -80,7 +80,7 @@ async def receive_mql5_call(server: str, account_number: str):
     for item in CLIENTS:
         if server == item["server"] and account_number == item["a_number"]:
             dtt = datetime.strptime(item["exp_date"], "%Y-%m-%d")
-            if (datetime.now() >= dtt):
+            if (datetime.now() < dtt):
                 return {"server": server, "account_number": account_number, "Val": dtt}
             else:
                 return {"EA expirado em: ", dtt}
