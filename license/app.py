@@ -36,8 +36,8 @@ async def read_root():
                 <title>Algotrade Sistemas</title>
             </head>
             <body>
-                <h1>Algotrade sistemas automatizados para mercado financeiro</h1>
-                <p>!...!</p>
+                <h1>Algotrade</h1>
+                <p></p>
             </body>
         </html>
     """
