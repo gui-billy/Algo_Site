@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 import jwt
 from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 
@@ -25,6 +26,22 @@ class LoginData(BaseModel):
 
 app = FastAPI()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+
+@app.get("/")
+async def read_root():
+    html_content = """
+        <html>
+            <head>
+                <title>Algotrade Sistemas</title>
+            </head>
+            <body>
+                <h1>Algotrade sistemas automatizados para mercado financeiro</h1>
+                <p>!...!</p>
+            </body>
+        </html>
+    """
+    return HTMLResponse(content=html_content, status_code=200)
 
 
 @app.post("/login")
