@@ -18,5 +18,11 @@ class LoginData(BaseModel):
 app = FastAPI()
 
 
-for cred in CREDENTIALS:
-    print(cred)
+@app.get("/mt5")
+async def login(data: LoginData):
+    for cred in CREDENTIALS:
+        if data.username == cred["username"] and data.password == \
+                cred["password"]:
+            return {
+                print('Login ok')
+            }
